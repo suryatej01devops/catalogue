@@ -1,6 +1,4 @@
 pipeline {
-
-```
 agent {
     node {
         label 'Agent-1'
@@ -65,6 +63,4 @@ post {
     }
 
 }
-```
-
 }
