@@ -1,65 +1,70 @@
 pipeline {
-    agent {
-        node{
-            label 'Agent-1'
-        }
-    }          // where to run the pipeline (any agent/node)
 
-    environment{
-        COURSE = "JENKINS"
-        appVersion = ""
+```
+agent {
+    node {
+        label 'Agent-1'
     }
-    options {
-        timeout(time: 10, unit: 'SECONDS')
-        disableConcurrentBuilds()
-    }
+}
 
-    stages {
+environment {
+    COURSE = "JENKINS"
+    appVersion = ""
+}
 
-        stage('READ Version') {
-            steps {
-                script{
-                    def packageJSON = readJSON file: "package.json"
-                    appVersion = packageJSON.version
-                    echo "app version: ${appVersion}"
-                }   
-                
-                
-            }
-        }
+options {
+    timeout(time: 10, unit: 'MINUTES')
+    disableConcurrentBuilds()
+}
 
-        stage('Install Dependencies') {
-            steps {
-                sh """
-                    npm install
-                    
-                """
-                
-            }
-        }
+stages {
 
-        stage('build') {
-            }
-            steps {
-               sh """
-                    docker build -t catalogue:${appVersion} .
-                    docker images
-               """
+    stage('Read Version') {
+        steps {
+            script {
+                def packageJSON = readJSON file: 'package.json'
+                env.appVersion = packageJSON.version
+
+                echo "Application Version: ${env.appVersion}"
             }
         }
     }
-    post{
-        always{
-        echo "i will always say hello again"
+
+    stage('Install Dependencies') {
+        steps {
+            sh '''
+                npm install
+            '''
+        }
+    }
+
+    stage('Docker Build') {
+        steps {
+            sh """
+                docker build -t catalogue:${env.appVersion} .
+                docker images
+            """
+        }
+    }
+
+}
+
+post {
+
+    always {
+        echo "Pipeline execution completed"
         cleanWs()
-        }
-        success {
-            echo "i will run if success"
-        }
-        failure{
-            echo "i will run if failire"
-        }
-
     }
-    
+
+    success {
+        echo "Pipeline executed successfully"
+    }
+
+    failure {
+        echo "Pipeline execution failed"
+    }
+
+}
+```
+
 }
