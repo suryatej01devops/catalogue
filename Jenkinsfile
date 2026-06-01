@@ -22,8 +22,7 @@ stages {
             script {
                 def packageJSON = readJSON file: 'package.json'
                 appVersion = packageJSON.version
-
-                echo "Application Version: ${env.appVersion}"
+                echo "app version: ${appVersion}"
             }
         }
     }
