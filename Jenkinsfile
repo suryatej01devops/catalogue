@@ -38,7 +38,7 @@ stages {
     stage('Docker Build') {
         steps {
             sh """
-                docker build -t catalogue:${env.appVersion} .
+                docker build -t catalogue:${appVersion} .
                 docker images
             """
         }
