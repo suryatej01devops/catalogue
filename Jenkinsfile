@@ -38,8 +38,16 @@ stages {
     stage('Docker Build') {
         steps {
             sh """
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 998301374787.dkr.ecr.us-east-1.amazonaws.com
                 docker build -t catalogue:${appVersion} .
                 docker images
+            """
+        }
+    }
+    stage('Deploy') {
+        steps {
+            sh """
+                
             """
         }
     }
