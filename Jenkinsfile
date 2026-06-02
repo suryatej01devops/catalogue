@@ -8,14 +8,14 @@ agent {
 environment {
     COURSE = "JENKINS"
     appVersion = ""
+    ACC_ID = "998301374787"
+    PROJECT = "roboshop"
+    COMPONENT = "catalogue"
 }
 
 options {
     timeout(time: 10, unit: 'MINUTES')
     disableConcurrentBuilds()
-    ACC_ID = "998301374787"
-    PROJECT = "roboshop"
-    COMPONENT = "catalogue"
 }
 
 stages {
