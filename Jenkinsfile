@@ -13,6 +13,9 @@ environment {
 options {
     timeout(time: 10, unit: 'MINUTES')
     disableConcurrentBuilds()
+    ACC_ID = "998301374787"
+    PROJECT = "roboshop"
+    COMPONENT = "catalogue"
 }
 
 stages {
@@ -38,8 +41,10 @@ stages {
     stage('Docker Build') {
         steps {
             sh """
-                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 998301374787.dkr.ecr.us-east-1.amazonaws.com
-                docker build -t catalogue:${appVersion} .
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com
+                docker build -t ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion} .
+                docker images
+                docker push ${ACC_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
                 docker images
             """
         }
