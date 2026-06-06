@@ -37,6 +37,43 @@ stages {
             '''
         }
     }
+    stage('unit test') {
+        steps {
+            sh '''
+                npm test
+            '''
+        }
+    }
+    }
+   //here you need to select scanner tool and send the analyasis to the server 
+    stage('Sonar Scan') {
+        envirnoment{
+            def  scannerhome = tool  'sonar-8.0'
+        }
+        steps {
+            script{
+                withSonarqubeEnv('sonar-server'){
+                    sh 'mvn clean package sonar:sonar'                     
+                }
+            }
+        }
+    }
+    stage('Quality Gate') {
+        steps {
+            timeout(time: 1, unit: 'HOURS') {
+                // Wait for the quality gate status
+                // abortPipeline: true will fail the Jenkins job if the quality gate is 'FAILED'
+                waitForQualityGate abortPipeline: true 
+            }
+        }
+    } */
+    stage('Install Dependencies') {
+        steps {
+            sh '''
+                npm install
+            '''
+        }
+    }
 
     stage('Docker Build') {
         steps {
